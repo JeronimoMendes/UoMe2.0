@@ -20,18 +20,18 @@ class Group(models.Model):
             # fetch relation between users
             # there must be a better way of doing this
             # TODO: filter with an "or" (user1 == user or user2 == user)
-            relation = creator.relations.objects.filter(user1=user)
+            relation = Relation.objects.filter(user1=user)
             if not relation:
-                creator.relations.objects.filter(user2=user)
+                Relation.objects.filter(user2=user)
 
             relation.add_movement(amount, creator, movement, False)
 
         self.movements.add(movement)
 
 class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     email_notifications = models.BooleanField(default=True)
     groups = models.ManyToManyField("Group")
-    relations = models.ManyToManyField("Relation")
 
 class Movement(models.Model):
     date = models.DateField(auto_now_add=True)
@@ -62,11 +62,8 @@ class Relation(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        subject = SubjectInfo.objects.create(subject="Matemática")
+        profile = Profile.objects.create(user=instance)
 
-        profile = Profile.objects.create(user=instance, xp=XPSystem.objects.create())
-
-        profile.subjects.add(subject)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

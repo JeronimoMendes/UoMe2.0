@@ -53,3 +53,18 @@ class Relation(models.Model):
 
     def has_user(self, user):
             return user1 == user or user1 == user
+
+
+# When a new User object is created, a Profile is attached
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        subject = SubjectInfo.objects.create(subject="Matemática")
+
+        profile = Profile.objects.create(user=instance, xp=XPSystem.objects.create())
+
+        profile.subjects.add(subject)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()

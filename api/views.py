@@ -11,4 +11,14 @@ class MovementView(APIView):
 
 		return Response(MovementSerializer(movement).data, status=status.HTTP_200_OK)
 
-	
+	def post(self, request):
+		serialized = MovementSerializer(data=request.data)
+		
+		if serializer.is_valid():
+			amount = serialized.data.get("amount")
+			description = serialized.data.get("description")
+			movement = Movement.objects.create(amount=amount, description=description, author=self.request.user.profile)
+
+			return Response(MovementSerializer(movement).data, status=status.HTTP_200_OK)
+
+		return Response({"Bad Request": "Invalid data..."}, status=status.HTTP_400_BAD_REQUEST) 

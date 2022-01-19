@@ -13,3 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
 		model = User
 		fields = ("email")
 
+class GroupSimpleSerializer(serializers.ModelSerializer):
+	movement = MovementSerializer(many=True)
+
+	class Meta:
+		model = Group
+		fields = ("name", "movement")

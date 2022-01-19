@@ -28,3 +28,9 @@ class GroupView(APIView):
 		group = get_object_or_404(Group, id=id)
 
 		return Response(GroupSimpleSerializer(group).data, status=status.HTTP_200_OK)
+
+class ProfileView(APIView):
+	def get(self, request, id):
+		profile = get_object_or_404(Profile, id=id)
+
+		return Response(ProfileSerializer(profile).data, status=status.HTTP_200_OK)

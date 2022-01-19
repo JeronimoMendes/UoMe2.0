@@ -4,4 +4,5 @@ from .views import *
 urlpatterns = [
     path("movement/<int:id>", MovementView.as_view()),
     path("group/<int:id>", GroupView.as_view()),
+    path("profile/<int:id>", ProfileView.as_view()),
 ]

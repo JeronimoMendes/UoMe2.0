@@ -22,3 +22,9 @@ class MovementView(APIView):
 			return Response(MovementSerializer(movement).data, status=status.HTTP_200_OK)
 
 		return Response({"Bad Request": "Invalid data..."}, status=status.HTTP_400_BAD_REQUEST) 
+
+class GroupView(APIView):
+	def get(self, request, id):
+		group = get_object_or_404(Group, id=id)
+
+		return Response(GroupSimpleSerializer(group).data, status=status.HTTP_200_OK)
